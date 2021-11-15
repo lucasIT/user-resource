@@ -39,6 +39,7 @@ public class DomainUserService implements UserService {
         User user = userRepo.findByUserName(userName);
         Role role = roleRepo.findByName(roleName);
         user.getRoles().add(role);
+        userRepo.save(user);
     }
 
     @Override

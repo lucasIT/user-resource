@@ -25,8 +25,8 @@ public class Role {
     @SequenceGenerator(name = "seq_role", schema = "fl", allocationSize = 1)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private ERole name;
+    private String name;
+
 
 }

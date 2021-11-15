@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Lucas Vieira
@@ -19,7 +21,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user", schema = "fl",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "userName"),
+                @UniqueConstraint(columnNames = "user_name"),
                 @UniqueConstraint(columnNames = "email")
         })
 public class User {
@@ -30,13 +32,14 @@ public class User {
     private Long id;
     private String name;
     private String email;
+    @Column(name = "user_name")
     private String userName;
     private String pass;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(schema = "fl", name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Collection<Role> roles = new ArrayList<>();
 
 }
