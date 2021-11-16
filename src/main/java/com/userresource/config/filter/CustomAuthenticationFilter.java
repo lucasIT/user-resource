@@ -1,4 +1,4 @@
-package com.userresource.config;
+package com.userresource.config.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

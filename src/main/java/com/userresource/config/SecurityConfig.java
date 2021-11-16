@@ -1,5 +1,7 @@
 package com.userresource.config;
 
+import com.userresource.config.filter.CustomAuthenticationFilter;
+import com.userresource.config.filter.CustomAuthorizationFilter;
 import com.userresource.domain.enumeration.ERole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -38,10 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers(GET, "/api/login/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority(ERole.ROLE_USER.name());
-        http.authorizeRequests().antMatchers(POST, "/api/user/save?**").hasAnyAuthority(ERole.ROLE_ADMIN.name());
+        http.authorizeRequests().antMatchers(GET, "/api/users/**").hasAnyAuthority(ERole.ROLE_USER.name());
+        http.authorizeRequests().antMatchers(POST, "/api/users/save/**").hasAnyAuthority(ERole.ROLE_ADMIN.name());
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
