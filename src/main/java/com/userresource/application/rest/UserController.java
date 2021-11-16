@@ -1,6 +1,7 @@
 package com.userresource.application.rest;
 
 import com.userresource.application.dto.RoleToUserForm;
+import com.userresource.config.RefreshToken;
 import com.userresource.domain.model.Role;
 import com.userresource.domain.model.User;
 import com.userresource.port.UserService;
@@ -9,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -18,6 +22,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final RefreshToken refreshToken;
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
@@ -40,6 +45,11 @@ public class UserController {
     public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
         userService.addRoleToUser(form.getUsername(), form.getRolename());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/token/refresh")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        refreshToken.refreshToken(request, response);
     }
 
 }
